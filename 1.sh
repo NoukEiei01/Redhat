@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Tailscale Auth Key 
+# Tailscale Auth Key
 read -p "Enter Tailscale Auth Key: " TS_KEY
 if [ -z "$TS_KEY" ]; then
   echo "❌ Error: Tailscale Auth Key is required"
@@ -16,6 +16,11 @@ dnf install -y xrdp xorgxrdp
 systemctl enable --now xrdp
 
 echo "=== Firewall ==="
+if ! command -v firewall-cmd &> /dev/null; then
+  echo "firewalld not found, installing..."
+  dnf install -y firewalld
+  systemctl enable --now firewalld
+fi
 firewall-cmd --permanent --add-port=3389/tcp
 firewall-cmd --permanent --add-service=ssh
 firewall-cmd --reload
