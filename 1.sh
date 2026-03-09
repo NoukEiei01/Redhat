@@ -10,7 +10,6 @@ fi
 echo "=== Installing EPEL ==="
 dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 dnf config-manager --enable epel
-dnf config-manager --enable epel-next
 
 echo "=== Installing MATE Desktop ==="
 dnf install -y mate-session-manager mate-panel mate-terminal \
