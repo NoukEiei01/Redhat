@@ -13,7 +13,10 @@ dnf config-manager --enable epel
 dnf config-manager --enable epel-next
 
 echo "=== Installing MATE Desktop ==="
-dnf groupinstall -y "MATE Desktop" --skip-broken
+dnf install -y mate-session-manager mate-panel mate-terminal \
+  mate-control-center caja marco mate-settings-daemon \
+  mate-backgrounds mate-icon-theme lightdm lightdm-gtk
+systemctl enable lightdm
 systemctl set-default graphical.target
 
 echo "=== Installing xrdp ==="
