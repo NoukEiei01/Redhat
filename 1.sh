@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# ถาม Tailscale Auth Key ตอนรัน
+# Tailscale Auth Key 
 read -p "Enter Tailscale Auth Key: " TS_KEY
 if [ -z "$TS_KEY" ]; then
   echo "❌ Error: Tailscale Auth Key is required"
@@ -9,7 +9,7 @@ if [ -z "$TS_KEY" ]; then
 fi
 
 echo "=== Installing EPEL ==="
-dnf install -y epel-release
+dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 
 echo "=== Installing xrdp ==="
 dnf install -y xrdp xorgxrdp
