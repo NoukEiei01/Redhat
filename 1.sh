@@ -11,10 +11,9 @@ echo "=== Installing EPEL ==="
 dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 dnf config-manager --enable epel
 
-echo "=== Installing MATE Desktop ==="
-dnf install -y mate-session-manager mate-panel mate-terminal \
-  mate-control-center caja marco mate-settings-daemon \
-  mate-backgrounds mate-icon-theme lightdm lightdm-gtk
+echo "=== Installing Cinnamon Desktop ==="
+dnf install -y cinnamon cinnamon-session gnome-terminal \
+  lightdm lightdm-gtk nemo --skip-broken
 systemctl enable lightdm
 systemctl set-default graphical.target
 
@@ -22,8 +21,8 @@ echo "=== Installing xrdp ==="
 dnf install -y xrdp xorgxrdp
 systemctl enable --now xrdp
 
-echo "=== Configure xrdp to use MATE ==="
-echo "mate-session" > /home/cloud-user/.xsession
+echo "=== Configure xrdp to use Cinnamon ==="
+echo "cinnamon-session" > /home/cloud-user/.xsession
 chown cloud-user:cloud-user /home/cloud-user/.xsession
 chmod +x /home/cloud-user/.xsession
 
