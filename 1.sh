@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-# Tailscale Auth Key
 read -p "Enter Tailscale Auth Key: " TS_KEY
 if [ -z "$TS_KEY" ]; then
   echo "❌ Error: Tailscale Auth Key is required"
@@ -11,13 +10,26 @@ fi
 echo "=== Installing EPEL ==="
 dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 
+echo "=== Installing KDE Plasma ==="
+dnf groupinstall -y "KDE Plasma Workspaces"
+systemctl set-default graphical.target
+
 echo "=== Installing xrdp ==="
 dnf install -y xrdp xorgxrdp
 systemctl enable --now xrdp
 
+echo "=== Configure xrdp to use KDE ==="
+cat > /home/cloud-user/.xsession << 'XSESSION'
+#!/bin/sh
+export DESKTOP_SESSION=plasma
+export XDG_SESSION_DESKTOP=KDE
+startplasma-x11
+XSESSION
+chown cloud-user:cloud-user /home/cloud-user/.xsession
+chmod +x /home/cloud-user/.xsession
+
 echo "=== Firewall ==="
 if ! command -v firewall-cmd &> /dev/null; then
-  echo "firewalld not found, installing..."
   dnf install -y firewalld
   systemctl enable --now firewalld
 fi
@@ -30,9 +42,5 @@ curl -fsSL https://tailscale.com/install.sh | sh
 systemctl enable --now tailscaled
 tailscale up --authkey=$TS_KEY --accept-routes --ssh
 
-echo "=== GNOME session ==="
-echo "gnome-session" > /home/cloud-user/.xsession
-chown cloud-user:cloud-user /home/cloud-user/.xsession
-
-echo "✅ Done! Connect via Tailscale IP"
+echo "✅ Done! Connect via RDP to:"
 tailscale ip -4
