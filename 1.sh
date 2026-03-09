@@ -10,21 +10,16 @@ fi
 echo "=== Installing EPEL ==="
 dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 
-echo "=== Installing KDE Plasma ==="
-dnf groupinstall -y "KDE Plasma Workspaces"
+echo "=== Installing MATE Desktop ==="
+dnf groupinstall -y "MATE Desktop"
 systemctl set-default graphical.target
 
 echo "=== Installing xrdp ==="
 dnf install -y xrdp xorgxrdp
 systemctl enable --now xrdp
 
-echo "=== Configure xrdp to use KDE ==="
-cat > /home/cloud-user/.xsession << 'XSESSION'
-#!/bin/sh
-export DESKTOP_SESSION=plasma
-export XDG_SESSION_DESKTOP=KDE
-startplasma-x11
-XSESSION
+echo "=== Configure xrdp to use MATE ==="
+echo "mate-session" > /home/cloud-user/.xsession
 chown cloud-user:cloud-user /home/cloud-user/.xsession
 chmod +x /home/cloud-user/.xsession
 
